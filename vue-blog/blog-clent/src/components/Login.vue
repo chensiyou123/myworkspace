@@ -1,5 +1,5 @@
 <template>
-  <el-form :rules="rules" class="login-container" label-position="left" label-width="0px" v-loading="loading">
+  <el-form :rules="rules" class="login-container" label-position="left" label-width="0px">
     <h3 class="login_title">系统登录</h3>
     <el-form-item prop="account">
       <el-input type="text" v-model="loginForm.username" auto-complete="off" placeholder="账号"></el-input>
@@ -9,43 +9,49 @@
     </el-form-item>
     <el-checkbox class="login_remember" v-model="checked" label-position="left">记住密码</el-checkbox>
     <el-form-item style="width: 100%">
-      <el-button type="primary" style="width: 100%" @click="submitClick">登录</el-button>
+      <el-button type="primary" @click.native.prevent="submitClick" style="width: 100%">登录</el-button>
     </el-form-item>
   </el-form>
 </template>
 <script>
+  import {postRequest} from '../utils/api'
   export default{
     data(){
       return {
+        //登录验证规则
         rules: {
           account: [{required: true, message: '请输入用户名', trigger: 'blur'}],
-          checkPass: [{required: true, message: '请输入密码', trigger: 'blur'}]
+          checkPass: [{required: true, message: '请输入密码', trigger: 'blur'}],
         },
-        checked: true,
+        //提交表单
         loginForm: {
-          username: 'admin',
+          username: 'sang',
           password: '123'
         },
-        loading: false
+        //记住密码
+        checked:false,
       }
     },
     methods: {
       submitClick: function () {
-        var _this = this;
-        this.loading = true;
-        this.postRequest('/login', {
-          username: this.loginForm.username,
-          password: this.loginForm.password
-        }).then(resp=> {
-          _this.loading = false;
-          if (resp && resp.status == 200) {
-            var data = resp.data;
-            _this.$store.commit('login', data.obj);
-            var path = _this.$route.query.redirect;
-            _this.$router
-              .replace({path: path == '/' || path == undefined ? '/home' : path});
+        let vm  = this;
+        postRequest('/login',{
+          username: vm.loginForm.username,
+          password: vm.loginForm.password
+        }).then(xhr=>{
+          if (xhr.status == 200) {
+            var json = xhr.data;
+            if (json.status == 'success') {
+              vm.$router.replace({path: '/home'});
+            } else {
+              vm.$alert('登录失败!', '失败!');
+            }
+          }else {
+            vm.$alert('登录失败!', '失败!');
           }
-        });
+        }, resp=> {
+          vm.$alert('找不到服务器⊙﹏⊙∥!', '失败!');
+        })
       }
     }
   }
@@ -61,11 +67,13 @@
     border: 1px solid #eaeaea;
     box-shadow: 0 0 25px #cac6c6;
   }
+
   .login_title {
     margin: 0px auto 40px auto;
     text-align: center;
     color: #505458;
   }
+
   .login_remember {
     margin: 0px 0px 35px 0px;
     text-align: left;
