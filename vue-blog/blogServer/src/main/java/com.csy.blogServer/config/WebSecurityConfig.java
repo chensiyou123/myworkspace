@@ -85,10 +85,4 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     AccessDeniedHandler getAccessDeniedHandler() {
         return new AuthenticationAccessDeniedHandler();
     }
-
-
-    @Bean
-    AccessDeniedHandler getAccessDeniedHandler() {
-        return new AuthenticationAccessDeniedHandler();
-    }
 }
