@@ -11,7 +11,8 @@ public class LoginRegController {
     @Autowired
     UserService userService;
     @RequestMapping("/login")
-    public RespBean loginError() {
+    public RespBean login(String username) {
+        userService.loadUserByUsername(username);
         return new RespBean("error", "登录失败!");
     }
 }
