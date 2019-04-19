@@ -27,8 +27,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     UserService userService;
-    @Autowired
-    private AccessDeniedHandler accessDeniedHandler;
+
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
 
@@ -76,11 +75,15 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             }
         }).loginProcessingUrl("/login")
                 .usernameParameter("username").passwordParameter("password").permitAll()
-                .and().logout().permitAll().and().csrf().disable().exceptionHandling().accessDeniedHandler(accessDeniedHandler);
+                .and().logout().permitAll().and().csrf().disable().exceptionHandling().accessDeniedHandler(getAccessDeniedHandler());
     }
     @Override
     public void configure(WebSecurity web) throws Exception {
         web.ignoring().antMatchers("/blogimg/**","/index.html","/static/**");
     }
 
+    @Bean
+    AccessDeniedHandler getAccessDeniedHandler() {
+        return new AuthenticationAccessDeniedHandler();
+    }
 }
