@@ -3,7 +3,7 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.csy.blogServer.mapper.UserMapper">
-    <select id="loadUserByUsername" resultType="com.csy.blogServer.bean.User">
+    <select id="loadUserByUsername" parameterType="java.util.Map" resultType="com.csy.blogServer.bean.User">
         SELECT * FROM user WHERE username=#{username}
     </select>
 </mapper>

@@ -4,7 +4,9 @@ import com.csy.blogServer.bean.User;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.Map;
+
 @Mapper
 public interface UserMapper {
-    User loadUserByUsername(@Param("username") String username);
+    User loadUserByUsername(Map map);
 }

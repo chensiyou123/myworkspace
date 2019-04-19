@@ -8,6 +8,9 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @Service
 public class UserService implements UserDetailsService {
     @Autowired
@@ -15,7 +18,9 @@ public class UserService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
-        User user = userMapper.loadUserByUsername(s);
+        Map map = new HashMap();
+        map.put("username",s);
+        User user = userMapper.loadUserByUsername(map);
         if (user == null) {
             return new User();
         }
