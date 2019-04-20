@@ -1,7 +1,9 @@
 package com.cay.springsecurity01.service.impl;
 
+import com.cay.springsecurity01.bean.Permission;
 import com.cay.springsecurity01.bean.Role;
 import com.cay.springsecurity01.bean.UserInfo;
+import com.cay.springsecurity01.repository.PermissionRepository;
 import com.cay.springsecurity01.repository.RoleRepository;
 import com.cay.springsecurity01.repository.UserInfoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 @Service
@@ -20,6 +23,10 @@ public class DataInit {
     RoleRepository roleRepository;
     @Autowired
     private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private PermissionRepository permissionReporitory;
+
     @PostConstruct
     public void dataInit() {
 
@@ -44,6 +51,23 @@ public class DataInit {
         user.setPassword(passwordEncoder.encode("123"));
         user.setRoles(roles);
         userInfoRepository.save(user);
+
+        //permission.
+        Permission permission1 = new Permission();
+        permission1.setUrl("/hello/helloUser");
+        permission1.setName("普通用户URL");
+        permission1.setDescription("普通用户的访问路径");
+        permission1.setRoles(roles);
+        permissionReporitory.save(permission1);
+
+        Permission permission2 = new Permission();
+        permission2.setUrl("/hello/helloAdmin");
+        permission2.setName("管理员URL");
+        permission2.setDescription("管理员的访问路径");
+        List<Role> roles2 = new ArrayList<>();
+        roles2.add(adminRole);
+        permission2.setRoles(roles2);
+        permissionReporitory.save(permission2);
     }
 
 }
