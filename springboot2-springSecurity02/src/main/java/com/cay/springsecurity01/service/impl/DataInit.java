@@ -27,7 +27,7 @@ public class DataInit {
     @Autowired
     private PermissionRepository permissionReporitory;
 
-    @PostConstruct
+    //@PostConstruct
     public void dataInit() {
 
         List<Role> roles = new ArrayList<>();
