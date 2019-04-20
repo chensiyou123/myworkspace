@@ -20,8 +20,6 @@ public class CustomUserDetailService implements UserDetailsService {
 
     @Autowired
     private UserInfoService userInfoService;
-    @Autowired
-    private PasswordEncoder passwordEncoder;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -31,7 +29,7 @@ public class CustomUserDetailService implements UserDetailsService {
 
         List<GrantedAuthority> authorities = new ArrayList<>();
         authorities.add(new SimpleGrantedAuthority("ROLE_"+userInfo.getRole().name()));
-        User userDetails = new User(userInfo.getUsername(),passwordEncoder.encode(userInfo.getPassword()),authorities);
+        User userDetails = new User(userInfo.getUsername(),userInfo.getPassword(),authorities);
         return userDetails;
     }
 }
