@@ -1,5 +1,8 @@
 package com.cay.springsecurity01.config;
 
+import com.cay.springsecurity01.filter.AfterLoginFilter;
+import com.cay.springsecurity01.filter.AtLoginFilter;
+import com.cay.springsecurity01.filter.BeforeLoginFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -9,6 +12,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
@@ -42,6 +46,9 @@ public class WebSecurityConfig  extends WebSecurityConfigurerAdapter {
                 .anyRequest().authenticated()  // 任何请求,登录后可以访问
                 .and()
                 .formLogin().loginPage("/login");
+        http.addFilterBefore(new BeforeLoginFilter(), UsernamePasswordAuthenticationFilter.class);
+        http.addFilterAfter(new AfterLoginFilter(), UsernamePasswordAuthenticationFilter.class);
+        http.addFilterAt(new AtLoginFilter(), UsernamePasswordAuthenticationFilter.class);
 
     }
-    }
+}
