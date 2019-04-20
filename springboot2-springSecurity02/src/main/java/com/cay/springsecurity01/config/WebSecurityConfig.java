@@ -18,14 +18,16 @@ public class WebSecurityConfig  extends WebSecurityConfigurerAdapter {
          * 这里配置了两个用户 admin和user
          */
         auth.inMemoryAuthentication()
-                .passwordEncoder(new BCryptPasswordEncoder())
                 .withUser("admin")
-                .password(new BCryptPasswordEncoder().encode("123456"))
+                .password(passwordEncoder().encode("123456"))
                 .roles();
         auth.inMemoryAuthentication()
-                .passwordEncoder(new BCryptPasswordEncoder())
                 .withUser("user")
-                .password(new BCryptPasswordEncoder().encode("123456"))
+                .password(passwordEncoder().encode("123456"))
                 .roles();
+    }
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
     }
 }
