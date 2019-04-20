@@ -48,9 +48,7 @@ public class MyFilterInvocationSecurityMetadataSource implements FilterInvocatio
      * @return 是否在范围中
      */
     private boolean isMatcherAllowedRequest(FilterInvocation fi){
-        return allowedRequest().stream().map(AntPathRequestMatcher::new)
-                .filter(requestMatcher -> requestMatcher.matches(fi.getHttpRequest()))
-                .toArray().length > 0;
+        return allowedRequest().stream().map(AntPathRequestMatcher::new).filter(requestMatcher -> requestMatcher.matches(fi.getHttpRequest())).toArray().length > 0;
     }
     /**
      * @return 定义允许请求的列表
