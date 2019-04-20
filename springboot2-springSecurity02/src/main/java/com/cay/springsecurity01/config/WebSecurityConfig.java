@@ -46,6 +46,8 @@ public class WebSecurityConfig  extends WebSecurityConfigurerAdapter {
                 .antMatchers("/","/index").permitAll()
                 .antMatchers("/test/**","/test1/**").permitAll()
                 .antMatchers("/res/**/*.{js,html}").permitAll()
+                .antMatchers("/my/**").access("@authService.canAccess(request,authentication)")
+                .antMatchers("/haha/**").access("hasRole('USER') and hasIpAddress('127.0.0.1')")
                 .anyRequest().authenticated()  // 任何请求,登录后可以访问
                 .and()
                 .formLogin().loginPage("/login");
