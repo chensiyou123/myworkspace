@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>首页</title>
+</head>
+<body>
+<h1>欢迎使用权限系统</h1>
+<form th:action="@{/logout}" method="post">
+    <input type="submit" value="退出登录"/>
+</form>
+<p>点击 <a th:href="@{/hello}">这里</a> 打个招呼吧</p>
+<p> <a th:href="@{/hello/helloAdmin}">admin管理员页面</a></p>
+<p><a th:href="@{/hello/helloUser}">用户页面</a></p>
+</body>
+</html>
