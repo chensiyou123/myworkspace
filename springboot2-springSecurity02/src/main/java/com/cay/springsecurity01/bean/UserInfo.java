@@ -1,13 +1,10 @@
 package com.cay.springsecurity01.bean;
+
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 public class UserInfo {
-    public enum Role{
-        admin,normal
-    }
-    @Enumerated(EnumType.STRING)
-    private Role role;
     @Id
     @GeneratedValue
     private long uid;//主键.
@@ -15,6 +12,9 @@ public class UserInfo {
     private String username;//用户名.
     private String password;//密码.
 
+    @ManyToMany(fetch=FetchType.EAGER)//立即从数据库中进行加载数据;
+    @JoinTable(name = "UserRole", joinColumns = { @JoinColumn(name = "uid") }, inverseJoinColumns ={@JoinColumn(name = "role_id") })
+    private List<Role> roles;
 
 
     public long getUid() {
@@ -41,11 +41,11 @@ public class UserInfo {
         this.password = password;
     }
 
-    public Role getRole() {
-        return role;
+    public List<Role> getRoles() {
+        return roles;
     }
 
-    public void setRole(Role role) {
-        this.role = role;
+    public void setRoles(List<Role> roles) {
+        this.roles = roles;
     }
 }

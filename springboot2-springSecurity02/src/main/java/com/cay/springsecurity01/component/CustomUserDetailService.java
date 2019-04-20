@@ -1,5 +1,6 @@
 package com.cay.springsecurity01.component;
 
+import com.cay.springsecurity01.bean.Role;
 import com.cay.springsecurity01.bean.UserInfo;
 import com.cay.springsecurity01.service.UserInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +29,9 @@ public class CustomUserDetailService implements UserDetailsService {
         if(userInfo == null) throw new UsernameNotFoundException("not found");
 
         List<GrantedAuthority> authorities = new ArrayList<>();
-        authorities.add(new SimpleGrantedAuthority("ROLE_"+userInfo.getRole().name()));
+        for(Role role:userInfo.getRoles()) {
+            authorities.add(new SimpleGrantedAuthority("ROLE_"+role.getName()));
+        }
         User userDetails = new User(userInfo.getUsername(),userInfo.getPassword(),authorities);
         return userDetails;
     }
