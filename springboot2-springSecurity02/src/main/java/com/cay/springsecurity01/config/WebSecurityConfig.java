@@ -43,6 +43,9 @@ public class WebSecurityConfig  extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
                 .antMatchers("/login").permitAll()
+                .antMatchers("/","/index").permitAll()
+                .antMatchers("/test/**","/test1/**").permitAll()
+                .antMatchers("/res/**/*.{js,html}").permitAll()
                 .anyRequest().authenticated()  // 任何请求,登录后可以访问
                 .and()
                 .formLogin().loginPage("/login");
