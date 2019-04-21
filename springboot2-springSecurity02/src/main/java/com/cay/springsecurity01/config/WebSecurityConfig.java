@@ -1,6 +1,7 @@
 package com.cay.springsecurity01.config;
 
-import com.cay.springsecurity01.filter.*;
+import com.cay.springsecurity01.filter.MyAccessDecisionManager;
+import com.cay.springsecurity01.filter.MyFilterInvocationSecurityMetadataSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.ObjectPostProcessor;
@@ -13,7 +14,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.access.intercept.FilterInvocationSecurityMetadataSource;
 import org.springframework.security.web.access.intercept.FilterSecurityInterceptor;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
@@ -57,7 +57,8 @@ public class WebSecurityConfig  extends WebSecurityConfigurerAdapter {
                 .withObjectPostProcessor(new MyObjectPostProcessor())
                 .anyRequest().authenticated()  // 任何请求,登录后可以访问
                 .and()
-                .formLogin().loginPage("/login");
+                .formLogin().loginPage("/login")
+                .and().sessionManagement().maximumSessions(1);
 
     }
     private class MyObjectPostProcessor implements ObjectPostProcessor<FilterSecurityInterceptor> {

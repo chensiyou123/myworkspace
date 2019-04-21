@@ -10,11 +10,9 @@ import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
-import org.springframework.util.DigestUtils;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -30,22 +28,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-
-        auth.userDetailsService(userService).passwordEncoder(new PasswordEncoder() {
-            @Override
-            public String encode(CharSequence charSequence) {
-                return DigestUtils.md5DigestAsHex(charSequence.toString().getBytes());
-            }
-            /**
-             * @param charSequence 明文
-             * @param s 密文
-             * @return
-             */
-            @Override
-            public boolean matches(CharSequence charSequence, String s) {
-                return s.equals(DigestUtils.md5DigestAsHex(charSequence.toString().getBytes()));
-            }
-        });
+        auth.inMemoryAuthentication().withUser("admin").password("123456").roles();
+        auth.inMemoryAuthentication().withUser("user").password("123456").roles();
     }
 
 
@@ -55,7 +39,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/admin/category/all").authenticated()
                 .antMatchers("/admin/**","/reg").hasRole("超级管理员")
                 .anyRequest().authenticated()//其他的路径都是登录后即可访问
-                .and().formLogin().loginPage("/login_page").successHandler(new AuthenticationSuccessHandler() {
+                .and()
+                .formLogin().loginPage("/login_page").successHandler(new AuthenticationSuccessHandler() {
             @Override
             public void onAuthenticationSuccess(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Authentication authentication) throws IOException, ServletException {
                 httpServletResponse.setContentType("application/json;charset=utf-8");
@@ -85,4 +70,5 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     AccessDeniedHandler getAccessDeniedHandler() {
         return new AuthenticationAccessDeniedHandler();
     }
+
 }
